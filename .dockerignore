@@ -1,6 +1,6 @@
-.git
 __pycache__/
-*.pyc
+*.py[cod]
 .env
-.env.*
-node_modules/
+.git
+.github/
+*.log
