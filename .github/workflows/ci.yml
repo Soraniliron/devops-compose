@@ -5,13 +5,19 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Build Docker Image
+        run: docker build -t devops-app:latest .
+
+      - name: Run Container and Test
         run: |
-          docker build -t devops-app:latest .
-          echo "Build finished successfully!"
+          docker run -d -p 5000:5000 --name test-app devops-app:latest
+          sleep 5
+          curl --fail http://localhost:5000 || exit 1
+          echo "Application is responding correctly!"
+          docker stop test-app
