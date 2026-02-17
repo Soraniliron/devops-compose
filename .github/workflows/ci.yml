@@ -17,7 +17,7 @@ jobs:
         run: docker build -t devops-app:latest .
       - name: Run Tests
         run: |
-          docker run -d -p 5000:5000 --name test-app --network host devops-app:latest
+          docker run -d -p 5000:5000 --name test-app -e REDIS_HOST=localhost devops-app:latest
           sleep 10
           curl --fail http://localhost:5000 || (docker logs test-app && exit 1)
           docker stop test-app
