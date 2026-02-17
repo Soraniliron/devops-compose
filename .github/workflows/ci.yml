@@ -1,26 +1,30 @@
+cat <<EOF > .github/workflows/ci.yml
 name: CI/CD Pipeline
-
 on:
-push:
-branches: [ main ]
-
+  push:
+    branches: [ main ]
 jobs:
-build-and-deploy:
-runs-on: ubuntu-latest
-steps:
-- name: Checkout code
-uses: actions/checkout@v3
-
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Build Docker Image
         run: docker build -t devops-app:latest .
-
-      - name: Run Container and Test
+      - name: Run Tests
         run: |
           docker run -d -p 5000:5000 --name test-app devops-app:latest
-          echo "Waiting for app to start..."
-          # נותן לאפליקציה עד 20 שניות לעלות
-          timeout 20s bash -c 'until curl -s localhost:5000; do sleep 2; done' || (docker logs test-app && exit 1)
-          echo "Application is up!"
+          sleep 10
+          curl --fail http://localhost:5000 || (docker logs test-app && exit 1)
           docker stop test-app
-git add .github/workflows/ci.yml
-git commit -m "Step 4: Finally fixing CI CD"
+          docker rm test-app
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: \${{ secrets.DOCKERHUB_USERNAME }}
+          password: \${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and Push
+        run: |
+          docker build -t \${{ secrets.DOCKERHUB_USERNAME }}/devops-app:latest .
+          docker push \${{ secrets.DOCKERHUB_USERNAME }}/devops-app:latest
+EOF
