@@ -1,3 +1,35 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Docker Image
+        run: docker build -t devops-app:latest .
+
+      - name: Run Container and Test
+        run: |
+          docker run -d -p 5000:5000 --name test-app devops-app:latest
+          echo "Waiting for app to start..."
+          # נותן לאפליקציה עד 20 שניות לעלות
+          timeout 20s bash -c 'until curl -s localhost:5000; do sleep 2; done' || (docker logs test-app && exit 1)
+          echo "Application is up!"
+          docker stop test-app
+git add .github/workflows/ci.yml
+git commit -m "Step 4: Finally fixing CI CD"
+
+
+
+
+
+
 name: CI/CD Pipeline
 
 on:
