@@ -1,15 +1,15 @@
-name: CI Pipeline
+name: CI/CD Pipeline
 
 on:
-  push:
-    branches: [ main ]
+push:
+branches: [ main ]
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+build-and-deploy:
+runs-on: ubuntu-latest
+steps:
+- name: Checkout code
+uses: actions/checkout@v3
 
       - name: Build Docker Image
         run: docker build -t devops-app:latest .
@@ -24,21 +24,3 @@ jobs:
           docker stop test-app
 git add .github/workflows/ci.yml
 git commit -m "Step 4: Finally fixing CI CD"
-
-
-
-
-
-
-name: CI/CD Pipeline
-
-on:
-push:
-branches: [ main ]
-
-jobs:
-build-and-deploy:
-runs-on: ubuntu-latest
-steps:
-- name: Checkout code
-uses: actions/checkout@v3
