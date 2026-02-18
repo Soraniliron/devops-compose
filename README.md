@@ -1,4 +1,4 @@
-
+[![CI/CD Pipeline](https://github.com/Soraniliron/devops-compose/actions/workflows/ci.yml/badge.svg)](https://github.com/Soraniliron/devops-compose/actions/workflows/ci.yml)
 # Docker Compose – Flask + Redis + Nginx
 
 Small DevOps project demonstrating a production-like setup using Docker Compose.
