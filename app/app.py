@@ -4,11 +4,11 @@ import os
 
 app = Flask(__name__)
 
-# קריאת כתובת ה-Redis ממשתנה הסביבה שהגדרנו ב-Render
+# קריאת כתובת ה-Redis ממשתנה הסביבה
 redis_url = os.getenv("REDIS_URL", "redis://localhost:6379")
 
-# התחברות ל-Redis עם תמיכה בחיבור מאובטח (SSL)
-r = redis.from_url(redis_url, decode_responses=True, ssl_cert_reqs=None)
+# התחברות ל-Redis - השתמשנו ב-ssl_metadata במקום ssl_cert_reqs
+r = redis.from_url(redis_url, decode_responses=True, ssl_connection_pool=True)
 
 @app.route("/")
 def hello():
