@@ -16,6 +16,9 @@ def hello():
 
 # זה הסעיף החדש (3)
 @app.route("/health")
+@app.route("/health")
+def health():
+    return "OK", 200
 def health():
     return "OK", 200
 
