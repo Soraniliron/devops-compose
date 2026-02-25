@@ -10,4 +10,12 @@ COPY app/app.py .
 EXPOSE 5000
 
 CMD ["python", "app.py"]
-
+FROM python:3.11-slim
+WORKDIR /app
+# העתקת דרישות והתקנה
+COPY app/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+# העתקת כל התוכן של תיקיית app לתוך /app בתוך המכולה
+COPY app/ .
+EXPOSE 5000
+CMD ["python", "app.py"]
