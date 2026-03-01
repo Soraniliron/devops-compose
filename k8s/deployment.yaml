@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: flask-app
-        image: soraniliron/flask-redis-app:latest
+        image: image: soraniliron/flask-redis-app:latest
         ports:
         - containerPort: 5000
         env:
